@@ -1,8 +1,11 @@
 package com.shair13.external_service.service;
 
 import com.shair13.external_service.dto.PagedMovie;
+import com.shair13.external_service.exception.MovieNotFoundException;
 import com.shair13.external_service.model.Movie;
+import jakarta.ws.rs.InternalServerErrorException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
@@ -18,6 +21,9 @@ public class MovieService {
                 .uri("/movies")
                 .body(Mono.just(movie), Movie.class)
                 .retrieve()
+                .onStatus(HttpStatusCode::is5xxServerError, clientResponse -> {
+                    throw new InternalServerErrorException("Server Error");
+                })
                 .bodyToMono(Movie.class)
                 .block();
     }
@@ -26,6 +32,13 @@ public class MovieService {
         return webClient.get()
                 .uri("/movies/{id}", id)
                 .retrieve()
+                .onStatus(HttpStatusCode::is4xxClientError, clientResponse -> {
+                    throw new
+                            MovieNotFoundException(id);
+                })
+                .onStatus(HttpStatusCode::is5xxServerError, clientResponse -> {
+                    throw new InternalServerErrorException("Server Error");
+                })
                 .bodyToMono(Movie.class)
                 .block();
     }
@@ -39,6 +52,9 @@ public class MovieService {
                         .queryParam("sortBy", sortBy)
                         .build())
                 .retrieve()
+                .onStatus(HttpStatusCode::is5xxServerError, clientResponse -> {
+                    throw new InternalServerErrorException("Server Error");
+                })
                 .bodyToMono(PagedMovie.class)
                 .block();
     }
@@ -48,14 +64,27 @@ public class MovieService {
                 .uri("/movies/{id}", id)
                 .body(Mono.just(movie), Movie.class)
                 .retrieve()
+                .onStatus(HttpStatusCode::is4xxClientError, clientResponse -> {
+                    throw new
+                            MovieNotFoundException(id);
+                })
+                .onStatus(HttpStatusCode::is5xxServerError, clientResponse -> {
+                    throw new InternalServerErrorException("Server Error");
+                })
                 .bodyToMono(Movie.class)
                 .block();
     }
 
-    public Movie deleteMovie(Long id) {
-        return webClient.delete()
+    public void deleteMovie(Long id) {
+        webClient.delete()
                 .uri("/movies/{id}", id)
                 .retrieve()
+                .onStatus(HttpStatusCode::is4xxClientError, clientResponse -> {
+                    throw new MovieNotFoundException(id);
+                })
+                .onStatus(HttpStatusCode::is5xxServerError, clientResponse -> {
+                    throw new InternalServerErrorException("Server Error");
+                })
                 .bodyToMono(Movie.class)
                 .block();
     }
