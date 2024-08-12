@@ -4,6 +4,8 @@ import com.shair13.external_service.dto.PagedMovie;
 import com.shair13.external_service.model.Movie;
 import com.shair13.external_service.service.MovieService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,9 +27,9 @@ public class MovieController {
     }
 
     @GetMapping("/movies")
-    public PagedMovie getMovies(@RequestParam(defaultValue = "0") int page,
-                                @RequestParam(defaultValue = "10") int size,
-                                @RequestParam(defaultValue = "id") String sortBy) {
+    public PagedMovie getMovies(@RequestParam(defaultValue = "0") @Min(0) int page,
+                                @RequestParam(defaultValue = "10") @Min(1) int size,
+                                @RequestParam(defaultValue = "id") @Pattern(regexp = "id|title|director|rate") String sortBy) {
         return movieService.getMovies(page, size, sortBy);
     }
 
