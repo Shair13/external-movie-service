@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
@@ -42,6 +43,23 @@ public class MovieController {
         return ResponseEntity.created(URI.create("/" + result.getId())).body(result);
     }
 
+    @Operation(summary = "Get movie by id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Movie Received",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Movie.class))}),
+            @ApiResponse(responseCode = "404", description = "Movie not found",
+                    content = @Content),
+            @ApiResponse(responseCode = "400", description = "Invalid id value",
+                    content = @Content)
+    })
+    @GetMapping("/{id}")
+    public ResponseEntity<Movie> getMovie(@PathVariable
+                                          @Parameter(description = "Id of wanted movie", required = true) Long id) {
+        Movie result = movieService.getMovieById(id);
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
     @Operation(summary = "Get all movies in pages")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Movies received",
@@ -57,27 +75,41 @@ public class MovieController {
                                                 @RequestParam(defaultValue = "10") @Min(1)
                                                 @Parameter(description = "Page size, minimum is 1") int size,
 
-                                                @RequestParam(defaultValue = "id") @Pattern(regexp = "id|title|director|rate")
+                                                @RequestParam(defaultValue = "id", name = "sort-by") @Pattern(regexp = "id|title|director|rate")
                                                 @Parameter(description = "Sort by field: id, title, director, or rate") String sortBy) {
 
         PagedMovie result = movieService.getMovies(page, size, sortBy);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
-    @Operation(summary = "Get movie by id")
+    @Operation(summary = "search movies by title, director or rate and get in pages ")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Movie Received",
+            @ApiResponse(responseCode = "200", description = "Movies received",
                     content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = Movie.class))}),
-            @ApiResponse(responseCode = "404", description = "Movie not found",
-                    content = @Content),
-            @ApiResponse(responseCode = "400", description = "Invalid id value",
+                            schema = @Schema(implementation = PagedMovie.class))}),
+            @ApiResponse(responseCode = "400", description = "Invalid pagination or searching values",
                     content = @Content)
     })
-    @GetMapping("/{id}")
-    public ResponseEntity<Movie> getMovie(@PathVariable
-                                          @Parameter(description = "Id of wanted movie", required = true) Long id) {
-        Movie result = movieService.getMovieById(id);
+    @GetMapping("/search")
+    public ResponseEntity<PagedMovie> searchMovies(@RequestParam(defaultValue = "0") @Min(0)
+                                                   @Parameter(description = "Page number, minimum is 0") int page,
+
+                                                   @RequestParam(defaultValue = "10") @Min(1)
+                                                   @Parameter(description = "Page size, minimum is 1") int size,
+
+                                                   @RequestParam(defaultValue = "id", name = "sort-by") @Pattern(regexp = "id|title|director|rate")
+                                                   @Parameter(description = "Sort by field: id, title, director, or rate") String sortBy,
+
+                                                   @RequestParam(defaultValue = "")
+                                                   @Parameter(description = "Search movie by title's fragment") String title,
+
+                                                   @RequestParam(defaultValue = "")
+                                                   @Parameter(description = "Search movie by director's fragment") String director,
+
+                                                   @RequestParam(defaultValue = "0", name = "rate-gt") @Min(0) @Max(10)
+                                                   @Parameter(description = "Search movie by rate greater than") Double rateGreaterThan) {
+
+        PagedMovie result = movieService.searchMovies(page, size, sortBy, title, director, rateGreaterThan);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 

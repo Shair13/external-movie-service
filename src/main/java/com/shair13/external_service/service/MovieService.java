@@ -33,8 +33,7 @@ public class MovieService {
                 .uri("/movies/{id}", id)
                 .retrieve()
                 .onStatus(HttpStatusCode::is4xxClientError, clientResponse -> {
-                    throw new
-                            MovieNotFoundException(id);
+                    throw new MovieNotFoundException(id);
                 })
                 .onStatus(HttpStatusCode::is5xxServerError, clientResponse -> {
                     throw new InternalServerErrorException("Server Error");
@@ -49,11 +48,36 @@ public class MovieService {
                         .path("/movies")
                         .queryParam("page", page)
                         .queryParam("size", size)
-                        .queryParam("sortBy", sortBy)
+                        .queryParam("sort-by", sortBy)
                         .build())
                 .retrieve()
                 .onStatus(HttpStatusCode::is5xxServerError, clientResponse -> {
                     throw new InternalServerErrorException("Server Error");
+                })
+                .onStatus(HttpStatusCode::is4xxClientError, clientResponse -> {
+                    throw new InternalServerErrorException("Bad Request");
+                })
+                .bodyToMono(PagedMovie.class)
+                .block();
+    }
+
+    public PagedMovie searchMovies(int page, int size, String sortBy, String title, String director, Double rate) {
+        return webClient.get()
+                .uri(uriBuilder -> uriBuilder
+                        .path("/movies/search")
+                        .queryParam("page", page)
+                        .queryParam("size", size)
+                        .queryParam("sort-by", sortBy)
+                        .queryParam("title", title)
+                        .queryParam("director", director)
+                        .queryParam("rate-gt", rate)
+                        .build())
+                .retrieve()
+                .onStatus(HttpStatusCode::is5xxServerError, clientResponse -> {
+                    throw new InternalServerErrorException("Server Error");
+                })
+                .onStatus(HttpStatusCode::is4xxClientError, clientResponse -> {
+                    throw new InternalServerErrorException("Bad Request");
                 })
                 .bodyToMono(PagedMovie.class)
                 .block();
@@ -65,8 +89,7 @@ public class MovieService {
                 .body(Mono.just(movie), Movie.class)
                 .retrieve()
                 .onStatus(HttpStatusCode::is4xxClientError, clientResponse -> {
-                    throw new
-                            MovieNotFoundException(id);
+                    throw new MovieNotFoundException(id);
                 })
                 .onStatus(HttpStatusCode::is5xxServerError, clientResponse -> {
                     throw new InternalServerErrorException("Server Error");
