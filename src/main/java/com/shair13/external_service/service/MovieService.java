@@ -1,5 +1,7 @@
 package com.shair13.external_service.service;
 
+import com.shair13.external_service.dto.MoviePageParams;
+import com.shair13.external_service.dto.MovieSearchParams;
 import com.shair13.external_service.dto.PagedMovie;
 import com.shair13.external_service.exception.MovieNotFoundException;
 import com.shair13.external_service.model.Movie;
@@ -42,35 +44,17 @@ public class MovieService {
                 .block();
     }
 
-    public PagedMovie getMovies(int page, int size, String sortBy) {
+    public PagedMovie searchMovies(MovieSearchParams searchParams, MoviePageParams pageParams) {
         return webClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .path("/movies")
-                        .queryParam("page", page)
-                        .queryParam("size", size)
-                        .queryParam("sort-by", sortBy)
-                        .build())
-                .retrieve()
-                .onStatus(HttpStatusCode::is5xxServerError, clientResponse -> {
-                    throw new InternalServerErrorException("Server Error");
-                })
-                .onStatus(HttpStatusCode::is4xxClientError, clientResponse -> {
-                    throw new InternalServerErrorException("Bad Request");
-                })
-                .bodyToMono(PagedMovie.class)
-                .block();
-    }
-
-    public PagedMovie searchMovies(int page, int size, String sortBy, String title, String director, Double rate) {
-        return webClient.get()
-                .uri(uriBuilder -> uriBuilder
-                        .path("/movies/search")
-                        .queryParam("page", page)
-                        .queryParam("size", size)
-                        .queryParam("sort-by", sortBy)
-                        .queryParam("title", title)
-                        .queryParam("director", director)
-                        .queryParam("rate-gt", rate)
+                        .queryParam("page", pageParams.getPage())
+                        .queryParam("size", pageParams.getSize())
+                        .queryParam("sort-by", pageParams.getSortBy())
+                        .queryParam("title", searchParams.getTitle())
+                        .queryParam("director", searchParams.getDirector())
+                        .queryParam("description", searchParams.getDescription())
+                        .queryParam("rate-gt", searchParams.getRateGreaterThan())
                         .build())
                 .retrieve()
                 .onStatus(HttpStatusCode::is5xxServerError, clientResponse -> {

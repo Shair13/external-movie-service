@@ -13,3 +13,7 @@ eureka:
 springdoc:
   swagger-ui:
     path: /swagger-documentation
+
+movie:
+  service:
+    url: lb://data-movie-service
