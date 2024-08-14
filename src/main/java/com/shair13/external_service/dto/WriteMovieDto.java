@@ -1,16 +1,14 @@
-package com.shair13.external_service.model;
+package com.shair13.external_service.dto;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 @Getter
-@Setter
 @AllArgsConstructor
-public class Movie {
-    @Setter(AccessLevel.NONE)
-    private Long id;
+public class WriteMovieDto {
     @NotBlank
     private String title;
     @NotBlank
@@ -18,5 +16,5 @@ public class Movie {
     private String description;
     @Min(1)
     @Max(10)
-    private Double rate;
+    private double rate;
 }

@@ -1,16 +1,17 @@
 package com.shair13.external_service.dto;
 
-import com.shair13.external_service.model.Movie;
-import lombok.Data;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
 
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class PagedMovie {
-    private List<Movie> movies;
-    private int pageNumber;
-    private int pageSize;
+    private List<ReadMovieDto> movies;
+    PageDetails pageDetails;
 }

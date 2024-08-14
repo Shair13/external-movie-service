@@ -1,8 +1,6 @@
 package com.shair13.external_service.controller;
 
-import com.shair13.external_service.dto.MoviePageParams;
-import com.shair13.external_service.dto.MovieSearchParams;
-import com.shair13.external_service.dto.PagedMovie;
+import com.shair13.external_service.dto.*;
 import com.shair13.external_service.model.Movie;
 import com.shair13.external_service.service.MovieService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -40,8 +38,8 @@ class MovieController {
                     content = @Content)
     })
     @PostMapping
-    ResponseEntity<Movie> addMovie(@RequestBody @Valid Movie movie) {
-        Movie result = movieService.save(movie);
+    ResponseEntity<ReadMovieDto> addMovie(@RequestBody @Valid WriteMovieDto writeMovie) {
+        ReadMovieDto result = movieService.save(writeMovie);
         return ResponseEntity.created(URI.create("/" + result.getId())).body(result);
     }
 
@@ -56,11 +54,11 @@ class MovieController {
                     content = @Content)
     })
     @GetMapping("/{id}")
-    ResponseEntity<Movie> getMovie(
+    ResponseEntity<ReadMovieDto> getMovie(
             @PathVariable
             @Parameter(description = "Id of wanted movie", required = true) Long id
     ) {
-        Movie result = movieService.getMovieById(id);
+        ReadMovieDto result = movieService.getMovieById(id);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
@@ -96,7 +94,7 @@ class MovieController {
             @Parameter(description = "Search movie by rate greater than") Double rateGreaterThan
     ) {
         MovieSearchParams searchParams = new MovieSearchParams(title, director, description, rateGreaterThan);
-        MoviePageParams pageParams = MoviePageParams.create(page, size, sortBy);
+        PageDetails pageParams = PageDetails.create(page, size, sortBy);
 
         PagedMovie result = movieService.searchMovies(searchParams, pageParams);
 
@@ -114,12 +112,12 @@ class MovieController {
                     content = @Content)
     })
     @PutMapping("/{id}")
-    ResponseEntity<Movie> updateMovie(
+    ResponseEntity<ReadMovieDto> updateMovie(
             @PathVariable
             @Parameter(description = "Id of wanted movie", required = true) Long id,
-            @RequestBody @Valid Movie movie
+            @RequestBody @Valid WriteMovieDto writeMovie
     ) {
-        Movie result = movieService.updateMovie(id, movie);
+        ReadMovieDto result = movieService.updateMovie(id, writeMovie);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
