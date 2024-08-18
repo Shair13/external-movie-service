@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.annotation.security.PermitAll;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -17,6 +18,7 @@ import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -38,6 +40,7 @@ class MovieController {
                     content = @Content)
     })
     @PostMapping
+    @PermitAll
     ResponseEntity<ReadMovieDto> addMovie(@RequestBody @Valid WriteMovieDto writeMovie) {
         ReadMovieDto result = movieService.save(writeMovie);
         return ResponseEntity.created(URI.create("/" + result.getId())).body(result);
@@ -54,6 +57,7 @@ class MovieController {
                     content = @Content)
     })
     @GetMapping("/{id}")
+    @PermitAll
     ResponseEntity<ReadMovieDto> getMovie(
             @PathVariable
             @Parameter(description = "Id of wanted movie", required = true) Long id
@@ -71,6 +75,7 @@ class MovieController {
                     content = @Content)
     })
     @GetMapping
+    @PermitAll
     ResponseEntity<PagedMovie> findMovies(
             @RequestParam(required = false) @Min(0)
             @Parameter(description = "Page number, minimum is 0") Integer page,
@@ -106,12 +111,17 @@ class MovieController {
             @ApiResponse(responseCode = "200", description = "Movie updated",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = Movie.class))}),
-            @ApiResponse(responseCode = "404", description = "Movie not found",
-                    content = @Content),
             @ApiResponse(responseCode = "400", description = "Invalid input",
+                    content = @Content),
+            @ApiResponse(responseCode = "401", description = "You are unauthorized",
+                    content = @Content),
+            @ApiResponse(responseCode = "403", description = "Forbidden sources",
+                    content = @Content),
+            @ApiResponse(responseCode = "404", description = "Movie not found",
                     content = @Content)
     })
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('client_admin')")
     ResponseEntity<ReadMovieDto> updateMovie(
             @PathVariable
             @Parameter(description = "Id of wanted movie", required = true) Long id,
@@ -125,12 +135,17 @@ class MovieController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Movie removed",
                     content = @Content),
-            @ApiResponse(responseCode = "404", description = "Movie not found",
-                    content = @Content),
             @ApiResponse(responseCode = "400", description = "Invalid id value",
+                    content = @Content),
+            @ApiResponse(responseCode = "401", description = "You are unauthorized",
+                    content = @Content),
+            @ApiResponse(responseCode = "403", description = "Forbidden sources",
+                    content = @Content),
+            @ApiResponse(responseCode = "404", description = "Movie not found",
                     content = @Content)
     })
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('client_admin')")
     ResponseEntity<Void> deleteMovie(
             @PathVariable
             @Parameter(description = "Id of wanted movie", required = true) Long id
