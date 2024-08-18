@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 @Setter
 @Configuration
 @ConfigurationProperties(prefix = "movie.service")
-public class DataMovieServiceConfig {
-    private String url;
+public class UrlConfig {
+    private String dataServiceUrl;
+    private String swaggerUrl;
 }

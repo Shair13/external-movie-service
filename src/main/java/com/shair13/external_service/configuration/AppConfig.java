@@ -12,13 +12,13 @@ import org.springframework.web.reactive.function.client.WebClient;
 @RequiredArgsConstructor
 public class AppConfig {
 
-    private final DataMovieServiceConfig dataMovieServiceConfig;
+    private final UrlConfig urlConfig;
 
     @Bean
     @LoadBalanced
     public WebClient.Builder webClientBuilder() {
         return WebClient.builder()
-                .baseUrl(dataMovieServiceConfig.getUrl())
+                .baseUrl(urlConfig.getDataServiceUrl())
                 .defaultHeader(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE);
     }
 
