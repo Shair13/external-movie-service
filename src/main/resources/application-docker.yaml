@@ -1,4 +1,15 @@
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${KEYCLOAK_URL}
+
 eureka:
   client:
     service-url:
       defaultZone: http://eureka-server:8761/eureka/
+
+movie:
+  service:
+    swaggerUrl: ${GATEWAY_URL}/api

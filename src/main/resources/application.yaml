@@ -5,7 +5,7 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: http://localhost:8180/realms/Shair13
+          issuer-uri: http://localhost:8080/realms/Shair13
           jwk-set-uri: ${spring.security.oauth2.resourceserver.jwt.issuer-uri}/protocol/openid-connect/certs
 
 server:
@@ -25,7 +25,7 @@ springdoc:
 movie:
   service:
     dataServiceUrl: lb://data-movie-service
-    swaggerUrl: http://localhost:8080/api
+    swaggerUrl: http://localhost:20180/api
 
 jwt:
   auth:
