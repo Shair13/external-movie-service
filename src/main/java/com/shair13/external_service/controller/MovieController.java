@@ -121,7 +121,7 @@ class MovieController {
                     content = @Content)
     })
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('client_admin')")
+    @PreAuthorize("hasRole('client_user')")
     ResponseEntity<ReadMovieDto> updateMovie(
             @PathVariable
             @Parameter(description = "Movie id", required = true) Long id,
@@ -145,7 +145,7 @@ class MovieController {
                     content = @Content)
     })
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('client_admin')")
+    @PreAuthorize("hasRole('client_user')")
     ResponseEntity<Void> deleteMovie(
             @PathVariable
             @Parameter(description = "Movie id", required = true) Long id
