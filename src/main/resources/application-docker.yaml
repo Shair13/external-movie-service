@@ -5,4 +5,4 @@ eureka:
 
 movie:
   service:
-    swaggerUrl: ${GATEWAY_URL}/api
+    swaggerUrl: ${SWAGGER_URL}
