@@ -69,7 +69,7 @@ class MovieServiceTest {
     }
 
     @Test
-    void searchMovies() {
+    void shouldSearchMovies() {
         // given
         MovieSearchParams searchParams = new MovieSearchParams(TITLE, DIRECTOR, DESCRIPTION, RATE);
         PageDetails pageParams = PageDetails.create(0, 10, "id");
@@ -91,7 +91,7 @@ class MovieServiceTest {
     }
 
     @Test
-    void updateMovie() {
+    void shouldUpdateMovie() {
         // given
         WriteMovieDto writeMovie = new WriteMovieDto(TITLE, DIRECTOR, DESCRIPTION, RATE);
         Movie movie = new Movie(ID, TITLE, DIRECTOR, DESCRIPTION, RATE);
@@ -109,7 +109,7 @@ class MovieServiceTest {
     }
 
     @Test
-    void deleteMovie() {
+    void shouldDeleteMovie() {
         // when
         movieService.deleteMovie(ID);
 

@@ -96,7 +96,7 @@ class MovieController {
             @Parameter(description = "Search movie by description's fragment") String description,
 
             @RequestParam(required = false, name = "rate-gt") @Min(0) @Max(10)
-            @Parameter(description = "Search movie by rate greater than") Double rateGreaterThan
+            @Parameter(description = "Search movies with a rating of at least") Double rateGreaterThan
     ) {
         MovieSearchParams searchParams = new MovieSearchParams(title, director, description, rateGreaterThan);
         PageDetails pageParams = PageDetails.create(page, size, sortBy);
