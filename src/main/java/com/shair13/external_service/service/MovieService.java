@@ -19,7 +19,7 @@ public class MovieService {
         return movieMapper.toReadDto(movie);
     }
 
-    public ReadMovieDto getMovieById(Long id) {
+    public ReadMovieDto getMovieById(long id) {
         Movie movie = movieRestClient.getById(id);
         return movieMapper.toReadDto(movie);
     }
@@ -28,12 +28,12 @@ public class MovieService {
         return movieRestClient.search(searchParams, pageParams);
     }
 
-    public ReadMovieDto updateMovie(Long id, WriteMovieDto writeMovie) {
+    public ReadMovieDto updateMovie(long id, WriteMovieDto writeMovie) {
         Movie movie = movieRestClient.update(id, movieMapper.toDomain(writeMovie));
         return movieMapper.toReadDto(movie);
     }
 
-    public void deleteMovie(Long id) {
+    public void deleteMovie(long id) {
         movieRestClient.delete(id);
     }
 }

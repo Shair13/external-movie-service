@@ -60,7 +60,7 @@ class MovieController {
     @PermitAll
     ResponseEntity<ReadMovieDto> getMovie(
             @PathVariable
-            @Parameter(description = "Movie id", required = true) Long id
+            @Parameter(description = "Movie id", required = true) long id
     ) {
         ReadMovieDto result = movieService.getMovieById(id);
         return new ResponseEntity<>(result, HttpStatus.OK);
@@ -124,7 +124,7 @@ class MovieController {
     @PreAuthorize("hasRole('client_user')")
     ResponseEntity<ReadMovieDto> updateMovie(
             @PathVariable
-            @Parameter(description = "Movie id", required = true) Long id,
+            @Parameter(description = "Movie id", required = true) long id,
             @RequestBody @Valid WriteMovieDto writeMovie
     ) {
         ReadMovieDto result = movieService.updateMovie(id, writeMovie);
@@ -148,7 +148,7 @@ class MovieController {
     @PreAuthorize("hasRole('client_user')")
     ResponseEntity<Void> deleteMovie(
             @PathVariable
-            @Parameter(description = "Movie id", required = true) Long id
+            @Parameter(description = "Movie id", required = true) long id
     ) {
         movieService.deleteMovie(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

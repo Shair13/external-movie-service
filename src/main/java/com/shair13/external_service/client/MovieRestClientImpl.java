@@ -32,7 +32,7 @@ public class MovieRestClientImpl implements MovieRestClient {
     }
 
     @Override
-    public Movie getById(Long id) {
+    public Movie getById(long id) {
         return webClient.get()
                 .uri("/movies/{id}", id)
                 .retrieve()
@@ -71,7 +71,7 @@ public class MovieRestClientImpl implements MovieRestClient {
     }
 
     @Override
-    public Movie update(Long id, Movie movie) {
+    public Movie update(long id, Movie movie) {
         return webClient.put()
                 .uri("/movies/{id}", id)
                 .body(Mono.just(movie), Movie.class)
@@ -87,7 +87,7 @@ public class MovieRestClientImpl implements MovieRestClient {
     }
 
     @Override
-    public void delete(Long id) {
+    public void delete(long id) {
         webClient.delete()
                 .uri("/movies/{id}", id)
                 .retrieve()

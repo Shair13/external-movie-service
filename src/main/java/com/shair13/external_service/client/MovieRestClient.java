@@ -7,8 +7,8 @@ import com.shair13.external_service.model.Movie;
 
 public interface MovieRestClient {
     Movie save(Movie movie);
-    Movie getById(Long id);
+    Movie getById(long id);
     PagedMovie search(MovieSearchParams searchParams, PageDetails pageParams);
-    Movie update(Long id, Movie movie);
-    void delete(Long id);
+    Movie update(long id, Movie movie);
+    void delete(long id);
 }
