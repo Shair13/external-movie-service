@@ -1,12 +1,13 @@
 package com.shair13.external_service.client;
 
-import com.shair13.external_service.dto.PageDetails;
 import com.shair13.external_service.dto.MovieSearchParams;
+import com.shair13.external_service.dto.PageDetails;
 import com.shair13.external_service.dto.PagedMovie;
 import com.shair13.external_service.exception.MovieNotFoundException;
 import com.shair13.external_service.model.Movie;
 import jakarta.ws.rs.InternalServerErrorException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -36,7 +37,7 @@ public class MovieRestClientImpl implements MovieRestClient {
         return webClient.get()
                 .uri("/movies/{id}", id)
                 .retrieve()
-                .onStatus(HttpStatusCode::is4xxClientError, clientResponse -> {
+                .onStatus(status -> status == HttpStatus.NOT_FOUND, clientResponse -> {
                     throw new MovieNotFoundException(id);
                 })
                 .onStatus(HttpStatusCode::is5xxServerError, clientResponse -> {
@@ -63,9 +64,6 @@ public class MovieRestClientImpl implements MovieRestClient {
                 .onStatus(HttpStatusCode::is5xxServerError, clientResponse -> {
                     throw new InternalServerErrorException("Server Error");
                 })
-                .onStatus(HttpStatusCode::is4xxClientError, clientResponse -> {
-                    throw new InternalServerErrorException("Bad Request");
-                })
                 .bodyToMono(PagedMovie.class)
                 .block();
     }
@@ -76,7 +74,7 @@ public class MovieRestClientImpl implements MovieRestClient {
                 .uri("/movies/{id}", id)
                 .body(Mono.just(movie), Movie.class)
                 .retrieve()
-                .onStatus(HttpStatusCode::is4xxClientError, clientResponse -> {
+                .onStatus(status -> status == HttpStatus.NOT_FOUND, clientResponse -> {
                     throw new MovieNotFoundException(id);
                 })
                 .onStatus(HttpStatusCode::is5xxServerError, clientResponse -> {
@@ -91,7 +89,7 @@ public class MovieRestClientImpl implements MovieRestClient {
         webClient.delete()
                 .uri("/movies/{id}", id)
                 .retrieve()
-                .onStatus(HttpStatusCode::is4xxClientError, clientResponse -> {
+                .onStatus(status -> status == HttpStatus.NOT_FOUND, clientResponse -> {
                     throw new MovieNotFoundException(id);
                 })
                 .onStatus(HttpStatusCode::is5xxServerError, clientResponse -> {
