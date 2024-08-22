@@ -83,8 +83,8 @@ class MovieController {
             @RequestParam(required = false) @Min(1)
             @Parameter(description = "Page size, minimum is 1") Integer size,
 
-            @RequestParam(required = false, name = "sort-by") @Pattern(regexp = "id|title|director|description|rate")
-            @Parameter(description = "Sort by field: id, title, director, description or rate") String sortBy,
+            @RequestParam(required = false, name = "sort")
+            @Parameter(description = "Sort by field: id, title, director, description or rate. Order asc and desc available after comma (e.g. id,desc)") String sortBy,
 
             @RequestParam(required = false)
             @Parameter(description = "Search movie by title's fragment") String title,

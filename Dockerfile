@@ -19,4 +19,4 @@ EXPOSE 8082
 
 WORKDIR /opt/app
 
-CMD java -Xms150m -Xmx250m -jar external-service-0.0.1-SNAPSHOT.jar
+CMD java -jar external-service-0.0.1-SNAPSHOT.jar

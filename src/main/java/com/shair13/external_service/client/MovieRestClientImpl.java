@@ -54,7 +54,7 @@ public class MovieRestClientImpl implements MovieRestClient {
                         .path("/movies")
                         .queryParam("page", pageParams.getPage())
                         .queryParam("size", pageParams.getSize())
-                        .queryParam("sort-by", pageParams.getSortBy())
+                        .queryParam("sort", pageParams.getSortBy())
                         .queryParam("title", searchParams.getTitle())
                         .queryParam("director", searchParams.getDirector())
                         .queryParam("description", searchParams.getDescription())
