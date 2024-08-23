@@ -11,4 +11,5 @@ import org.springframework.context.annotation.Configuration;
 public class UrlConfig {
     private String dataServiceUrl;
     private String swaggerUrl;
+    private String keycloakConfigUrl;
 }

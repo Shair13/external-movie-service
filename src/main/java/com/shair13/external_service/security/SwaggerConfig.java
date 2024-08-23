@@ -27,9 +27,16 @@ public class SwaggerConfig {
                                         .scheme("bearer")
                                         .bearerFormat("JWT")
                                         .in(SecurityScheme.In.HEADER)
-                                        .name("Authorization")))
+                                        .name("Authorization"))
+                        .addSecuritySchemes("Keycloak",
+                                new SecurityScheme()
+                                        .name("Keycloak")
+                                        .openIdConnectUrl(urlConfig.getKeycloakConfigUrl())
+                                        .scheme("bearer")
+                                        .type(SecurityScheme.Type.OPENIDCONNECT)
+                                        .in(SecurityScheme.In.HEADER)))
                 .addSecurityItem(
-                        new SecurityRequirement().addList("bearer-jwt"))
+                        new SecurityRequirement().addList("bearer-jwt").addList("Keycloak"))
                 .servers(List.of(
                         new Server().url(urlConfig.getSwaggerUrl()).description("movies api")
                 ));

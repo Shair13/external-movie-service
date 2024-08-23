@@ -19,6 +19,9 @@ eureka:
 springdoc:
   swagger-ui:
     path: /swagger-ui
+    oauth:
+      client-id: movie-rest-api
+      client-secret: mPEQY5rJaAmylsSuU6btHeqv5xrAUp3P
   api-docs:
     path: /v3/api-docs
 
@@ -26,6 +29,7 @@ movie:
   service:
     dataServiceUrl: lb://data-movie-service
     swaggerUrl: http://localhost:20180/api
+    keycloakConfigUrl: http://srv29.mikr.us:40053/realms/Shair13/.well-known/openid-configuration
 
 jwt:
   auth:
