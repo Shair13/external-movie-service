@@ -10,13 +10,13 @@ import lombok.Setter;
 public class PageDetails {
     Integer page;
     Integer size;
-    String sortBy;
+    String sort;
 
-    public static PageDetails create(Integer page, Integer size, String sortBy) {
+    public static PageDetails create(Integer page, Integer size, String sort) {
         return new PageDetails(
                 page != null ? page : 0,
                 size != null ? size : 10,
-                sortBy != null ? sortBy : "id"
+                sort != null ? sort : "id"
         );
     }
 }
