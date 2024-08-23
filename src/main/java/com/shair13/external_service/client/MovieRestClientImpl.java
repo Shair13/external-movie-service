@@ -7,6 +7,7 @@ import com.shair13.external_service.exception.MovieNotFoundException;
 import com.shair13.external_service.model.Movie;
 import jakarta.ws.rs.InternalServerErrorException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Primary;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,7 @@ import reactor.core.publisher.Mono;
 
 @RequiredArgsConstructor
 @Service
+@Primary
 public class MovieRestClientImpl implements MovieRestClient {
 
     private final WebClient webClient;
