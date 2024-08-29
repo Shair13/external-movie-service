@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -15,6 +16,16 @@ import org.springframework.web.reactive.function.client.WebClient;
 public class AppConfig {
 
     private final UrlConfig urlConfig;
+
+
+//    @Bean
+//    @LoadBalanced
+//    public RestClient restClient(RestClient.Builder builder){
+//        return builder
+//                .baseUrl(urlConfig.getDataServiceUrl())
+//                .defaultHeader(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
+//                .build();
+//    }
 
     @Bean
     @LoadBalanced
@@ -35,6 +46,20 @@ public class AppConfig {
 
     @Bean
     WebClient webClient(WebClient.Builder builder) {
+        return builder.build();
+    }
+
+
+    @Bean
+    @LoadBalanced
+    public RestClient.Builder restClientBuilder(){
+        return RestClient.builder()
+                .baseUrl(urlConfig.getDataServiceUrl())
+                .defaultHeader(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE);
+    }
+
+    @Bean
+    RestClient restClient(RestClient.Builder builder){
         return builder.build();
     }
 }

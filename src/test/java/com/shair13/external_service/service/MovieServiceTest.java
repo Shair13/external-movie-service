@@ -1,6 +1,6 @@
 package com.shair13.external_service.service;
 
-import com.shair13.external_service.client.MovieRestClient;
+import com.shair13.external_service.client.MovieClient;
 import com.shair13.external_service.dto.*;
 import com.shair13.external_service.mapper.MovieMapper;
 import com.shair13.external_service.model.Movie;
@@ -28,7 +28,7 @@ class MovieServiceTest {
     private final Double RATE = 9.7;
 
     @Mock
-    private MovieRestClient mockMovieRestClient;
+    private MovieClient mockMovieClient;
     @Mock
     private MovieMapper mockMovieMapper;
     @InjectMocks
@@ -42,7 +42,7 @@ class MovieServiceTest {
         ReadMovieDto readMovie = new ReadMovieDto(-1L, TITLE, DIRECTOR, DESCRIPTION, RATE);
 
         when(mockMovieMapper.toDomain(writeMovie)).thenReturn(movie);
-        when(mockMovieRestClient.save(movie)).thenReturn(movie);
+        when(mockMovieClient.save(movie)).thenReturn(movie);
         when(mockMovieMapper.toReadDto(movie)).thenReturn(readMovie);
 
         // when
@@ -58,7 +58,7 @@ class MovieServiceTest {
         Movie movie = new Movie(ID, TITLE, DIRECTOR, DESCRIPTION, RATE);
         ReadMovieDto readMovie = new ReadMovieDto(ID, TITLE, DIRECTOR, DESCRIPTION, RATE);
 
-        when(mockMovieRestClient.getById(ID)).thenReturn(movie);
+        when(mockMovieClient.getById(ID)).thenReturn(movie);
         when(mockMovieMapper.toReadDto(movie)).thenReturn(readMovie);
 
         // when
@@ -80,7 +80,7 @@ class MovieServiceTest {
 
         PagedMovie pagedMovie = new PagedMovie(readMovies, pageParams);
 
-        when(mockMovieRestClient.search(searchParams, pageParams)).thenReturn(pagedMovie);
+        when(mockMovieClient.search(searchParams, pageParams)).thenReturn(pagedMovie);
 
         // when
         PagedMovie result = movieService.searchMovies(searchParams, pageParams);
@@ -98,7 +98,7 @@ class MovieServiceTest {
         ReadMovieDto readMovie = new ReadMovieDto(ID, TITLE, DIRECTOR, DESCRIPTION, RATE);
 
         when(mockMovieMapper.toDomain(writeMovie)).thenReturn(movie);
-        when(mockMovieRestClient.update(ID, movie)).thenReturn(movie);
+        when(mockMovieClient.update(ID, movie)).thenReturn(movie);
         when(mockMovieMapper.toReadDto(movie)).thenReturn(readMovie);
 
         // then
@@ -114,6 +114,6 @@ class MovieServiceTest {
         movieService.deleteMovie(ID);
 
         // then
-        verify(mockMovieRestClient, times(1)).delete(ID);
+        verify(mockMovieClient, times(1)).delete(ID);
     }
 }

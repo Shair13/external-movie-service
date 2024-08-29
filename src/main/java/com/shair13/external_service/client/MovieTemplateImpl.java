@@ -7,7 +7,6 @@ import com.shair13.external_service.exception.MovieNotFoundException;
 import com.shair13.external_service.model.Movie;
 import jakarta.ws.rs.InternalServerErrorException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Primary;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
@@ -17,7 +16,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 @RequiredArgsConstructor
 @Service
-public class MovieRestTemplateImpl implements MovieRestClient {
+public class MovieTemplateImpl implements MovieClient {
 
     private final String MOVIES_URL = "/movies";
 
@@ -25,10 +24,7 @@ public class MovieRestTemplateImpl implements MovieRestClient {
 
     @Override
     public Movie save(Movie movie) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-
-        HttpEntity<Movie> requestEntity = new HttpEntity<>(movie, headers);
+        HttpEntity<Movie> requestEntity = new HttpEntity<>(movie);
 
         ResponseEntity<Movie> response;
 
@@ -47,7 +43,7 @@ public class MovieRestTemplateImpl implements MovieRestClient {
 
     @Override
     public Movie getById(long id) {
-        String url = "/movies/{id}";
+        String url = MOVIES_URL + "/{id}";
 
         ResponseEntity<Movie> response;
 
@@ -99,10 +95,7 @@ public class MovieRestTemplateImpl implements MovieRestClient {
     public Movie update(long id, Movie movie) {
         String url = MOVIES_URL + "/{id}";
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-
-        HttpEntity<Movie> requestEntity = new HttpEntity<>(movie, headers);
+        HttpEntity<Movie> requestEntity = new HttpEntity<>(movie);
 
         ResponseEntity<Movie> response;
 
