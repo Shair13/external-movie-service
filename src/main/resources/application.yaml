@@ -1,0 +1,38 @@
+spring:
+  application:
+    name: external-movie-service
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://srv29.mikr.us:40053/realms/Shair13
+          jwk-set-uri: ${spring.security.oauth2.resourceserver.jwt.issuer-uri}/protocol/openid-connect/certs
+
+server:
+  port: 8082
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:30180/eureka/
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui
+    oauth:
+      client-id: movie-rest-api
+      client-secret: mPEQY5rJaAmylsSuU6btHeqv5xrAUp3P
+  api-docs:
+    path: /v3/api-docs
+
+movie:
+  service:
+    dataServiceUrl: lb://data-movie-service
+    swaggerUrl: http://localhost:20180/api
+    keycloakConfigUrl: http://srv29.mikr.us:40053/realms/Shair13/.well-known/openid-configuration
+
+jwt:
+  auth:
+    converter:
+      resource-id: movie-rest-api
+      principle-attribute: preferred_username
