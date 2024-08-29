@@ -9,9 +9,9 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.shair13</groupId>
-    <artifactId>external-service</artifactId>
+    <artifactId>external-movie-service</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>external-service</name>
+    <name>external-movie-service</name>
     <description>Demo project for Spring Boot</description>
     <properties>
         <java.version>17</java.version>
